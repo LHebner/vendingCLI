@@ -6,7 +6,6 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -21,18 +20,20 @@ public class VendingMachine
     {
             // Gets stock of items from Inventory File
             File inventoryTemp = new File("vendingmachine.csv");
-            try
+            try(Scanner reader = new Scanner(inventoryTemp))
             {
-                BufferedReader reader = new BufferedReader(new FileReader(inventoryTemp));
-                String line = reader.readLine();
-                while (line != null)
+//                BufferedReader reader = new BufferedReader(new FileReader(inventoryTemp));
+
+                while (reader.hasNextLine())
                 {
+                    String line = reader.nextLine();
                     String[] invSegments = line.split("\\|");
-                    inventor.put(invSegments[0] ,new VendingItem(invSegments[0],invSegments[1],new BigDecimal(invSegments[2]),invSegments[3]));
-                    line = reader.readLine();
+                    VendingItem newItem = new VendingItem(invSegments[0],invSegments[1],new BigDecimal(invSegments[2]),invSegments[3]);
+                    inventor.put(invSegments[0] ,newItem);
                 }
-            } catch (IOException e)
+            } catch (FileNotFoundException e)
             {
+                System.out.println("Couldnt find the file!");
         }
     }
 
@@ -110,7 +111,7 @@ public class VendingMachine
         return false;
     }
 
-    public void printVendingContents()
+    public String printVendingContents()
     {
         char previousId = inventor.get("A1").getLocationId().charAt(0);
         int longestItemLength = 0;
@@ -140,7 +141,9 @@ public class VendingMachine
                 System.out.print("\n|"+ item.getValue().getLocationId() + " " + itemName  + " " + itemType  + " $" + item.getValue().getPrice()  + "  InStock: " + item.getValue().getInStockAmount() + " " );
             }
             previousId = item.getValue().getLocationId().charAt(0);
+            System.out.println(previousId);
         }
 
+        return String.valueOf(previousId);
     }
 }
