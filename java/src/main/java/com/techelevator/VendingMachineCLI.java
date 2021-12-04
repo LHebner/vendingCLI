@@ -39,13 +39,16 @@ public class VendingMachineCLI
 			}
 			else if (choice.equals(MAIN_MENU_OPTION_PURCHASE))
 			{
-				vendingMachine.getCustomerMoney();
+				//vendingMachine.getCustomerMoney();
+				//vendingMachine.printVendingContents();
+				//System.out.println("---------------------------------------");
 				vendingMachine.purchaseProcess();
 				// do purchase
 			}
 			else if(choice.equals(MAIN_MENU_OPTION_EXIT))
 			{
 				// do exit
+				vendingMachine.completeTransaction();
 			}
 		}
 	}
